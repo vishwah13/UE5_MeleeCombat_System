@@ -12,7 +12,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Enemy.h"
 #include "Components/DecalComponent.h"
-#include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Engine/EngineTypes.h"
@@ -24,26 +23,11 @@ ACharacterBase::ACharacterBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	/*check(GetMesh());
+	check(GetMesh());
 	SwordActor = CreateDefaultSubobject<UChildActorComponent>(TEXT("Sword"));
 	SwordActor->SetMobility(EComponentMobility::Movable);
-	SwordActor->SetupAttachment(GetMesh(), TEXT("SwordSocket"));*/	
-
-	leftHandSphereCollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("LeftHandSphereCollisionComponent"));
-	leftHandSphereCollisionComponent->SetMobility(EComponentMobility::Movable);
-	leftHandSphereCollisionComponent->SetupAttachment(GetMesh(), TEXT("hand_l"));
-
-	rightHandSphereCollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("RightHandSphereCollisionComponent"));
-	rightHandSphereCollisionComponent->SetMobility(EComponentMobility::Movable);
-	rightHandSphereCollisionComponent->SetupAttachment(GetMesh(), TEXT("hand_r"));
-
-	leftLegSphereCollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("LeftLegSphereCollisionComponent"));
-	leftLegSphereCollisionComponent->SetMobility(EComponentMobility::Movable);
-	leftLegSphereCollisionComponent->SetupAttachment(GetMesh(), TEXT("foot_l"));
-
-	rightLegSphereCollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("RightLegSphereCollisionComponent"));
-	rightLegSphereCollisionComponent->SetMobility(EComponentMobility::Movable);
-	rightLegSphereCollisionComponent->SetupAttachment(GetMesh(), TEXT("foot_r"));
+	SwordActor->SetupAttachment(GetMesh(), TEXT("SwordSocket"));	
+	
 	
 	
 	//GamePlay Ability System
@@ -173,38 +157,6 @@ void ACharacterBase::RotateToTarget(AEnemy* target, float deltaTime)
 	}
 }
 
-void ACharacterBase::Attacking()
-{
-	bIsAttacking = !bIsAttacking;
-}
-
-
-void ACharacterBase::Attack(USphereComponent* sphereCollision)
-{
-	sphereCollision->OnComponentHit.AddDynamic(this, &ACharacterBase::Damage);
-}
-
-void ACharacterBase::Damage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
-{
-	if (OtherActor != this && OtherActor != NULL) {
-		UE_LOG(LogTemp, Warning, TEXT("DAMAGE !!!"));
-
-		FGameplayEventData Payload;
-		FGameplayTag Tag;
-		Tag = FGameplayTag::RequestGameplayTag(TEXT("Weapon.Hit"), true);
-
-		Payload.Instigator = this->GetInstigator();
-		Payload.Target = OtherActor;
-
-		Payload.TargetData = UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor(OtherActor);
-
-		//UE_LOG(LogTemp, Warning, TEXT("Actor name is : %s"),*HitResult.GetActor()->GetName());
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this->GetInstigator(), Tag, Payload);
-		
-	}
-	
-}
-
 // Called every frame
 void ACharacterBase::Tick(float DeltaTime)
 {
@@ -214,7 +166,7 @@ void ACharacterBase::Tick(float DeltaTime)
 	{
 		if (ClosestEnemy == nullptr)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("ClosestEnemy is NULL."));
+			UE_LOG(LogTemp, Warning, TEXT("ClosestEnemy is NULL."))
 		}
 		
 		RotateToTarget(ClosestEnemy, DeltaTime);

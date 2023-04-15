@@ -23,8 +23,8 @@ public:
 	// Sets default values for this character's properties
 	ACharacterBase();
 	
-	/*UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UChildActorComponent* SwordActor;*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UChildActorComponent* SwordActor;
 	
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	
@@ -41,15 +41,6 @@ public:
 	TArray < TSubclassOf<class UGASGameplayAbility>> DefaultAbility;
 	
 protected:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightCollision")
-	class USphereComponent* leftHandSphereCollisionComponent;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightCollision")
-	class USphereComponent* rightHandSphereCollisionComponent;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightCollision")
-	class USphereComponent* leftLegSphereCollisionComponent;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightCollision")
-	class USphereComponent* rightLegSphereCollisionComponent;
 
 	UPROPERTY(EditDefaultsOnly,Category = "Enemy")
 	TSubclassOf< AActor > TargetActorClass;
@@ -70,15 +61,8 @@ protected:
 	void FindClosestTarget();
 	void RotateToTarget(AEnemy* target, float deltaTime);
 	bool bIsTargetLocked = false;
-	bool bIsAttacking = false;
 
 public:	
-	UFUNCTION(BlueprintCallable)
-	void Attacking();
-
-	UFUNCTION(BlueprintCallable)
-	void Attack(USphereComponent* sphereCollision);
-	void Damage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

@@ -27,6 +27,19 @@ void ASword::BeginPlay()
 	Super::BeginPlay();
 	
 	OwnerActor = GetParentActor();
+	
+	
+	if (OwnerActor == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Owner pawn is NULL"));
+		return;
+	}
+		
+	if (OwnerActor->GetInstigator() == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("OwnerActorInstigator pawn is NULL"));
+		return;
+	}
 }
 
 // Called every frame
